@@ -130,42 +130,6 @@ func MatToSquare(inMat gocv.Mat) (gocv.Mat, image.Rectangle) {
 	return outMat, overlayRect
 }
 
-func Squarify(inMat gocv.Mat) gocv.Mat {
-	contoursBoundingRect := LargestContourRect(inMat)
-	// contoursBoundingRect := utils.ContoursBoundingRect(inMat)
-
-	if contoursBoundingRect.Empty() {
-		log.Println("Contours NOT found. ")
-
-		canvasMat, overlayRect := MatToSquare(inMat)
-		gocv.Rectangle(&canvasMat, overlayRect, color.RGBA{255, 0, 0, 0}, 2)
-
-		return canvasMat
-	} else {
-		log.Println("Contours FOUND:", contoursBoundingRect.String())
-
-		inMatRect := BoundingRect(inMat)
-		contoursBoundingSquare := RectToSquare(contoursBoundingRect)
-		unionRect := inMatRect.Union(contoursBoundingSquare)
-
-		if unionRect.Eq(inMatRect) {
-			log.Println("unionSquare, inMatRect: EQ", unionRect.String(), inMatRect.String())
-			centerPt := Center(contoursBoundingRect)
-
-			maxCenteredSquare := MaxCenteredSquareInRectangle(inMatRect, centerPt)
-			gocv.Rectangle(&inMat, maxCenteredSquare, color.RGBA{255, 0, 0, 0}, 2)
-
-			return inMat
-		} else {
-			log.Println("unionSquare, inMatRect: NOT EQ ", unionRect.String(), inMatRect.String())
-
-			canvasMat, overlayRect := MatToSquare(inMat)
-			gocv.Rectangle(&canvasMat, overlayRect, color.RGBA{255, 0, 0, 0}, 2)
-			return canvasMat
-		}
-	}
-}
-
 func GetBackgroundColor(img gocv.Mat) color.RGBA {
 	// Get dimensions
 	rows := img.Rows()
@@ -189,4 +153,40 @@ func GetBackgroundColor(img gocv.Mat) color.RGBA {
 
 	// Return the color as color.RGBA (with full opacity)
 	return color.RGBA{R: uint8(avgR), G: uint8(avgG), B: uint8(avgB), A: 255}
+}
+
+func Squarify(inMat gocv.Mat) gocv.Mat {
+	contoursBoundingRect := LargestContourRect(inMat)
+	// contoursBoundingRect := utils.ContoursBoundingRect(inMat)
+
+	if contoursBoundingRect.Empty() {
+		log.Println("Contours NOT found. ")
+
+		canvasMat, overlayRect := MatToSquare(inMat)
+		gocv.Rectangle(&canvasMat, overlayRect, color.RGBA{0, 0, 255, 0}, 2)
+
+		return canvasMat
+	} else {
+		log.Println("Contours FOUND:", contoursBoundingRect.String())
+
+		inMatRect := BoundingRect(inMat)
+		contoursBoundingSquare := RectToSquare(contoursBoundingRect)
+		unionRect := inMatRect.Union(contoursBoundingSquare)
+
+		if unionRect.Eq(inMatRect) {
+			log.Println("unionSquare, inMatRect: EQ", unionRect.String(), inMatRect.String())
+			centerPt := Center(contoursBoundingRect)
+
+			maxCenteredSquare := MaxCenteredSquareInRectangle(inMatRect, centerPt)
+			gocv.Rectangle(&inMat, maxCenteredSquare, color.RGBA{255, 0, 0, 0}, 2)
+
+			return inMat
+		} else {
+			log.Println("unionSquare, inMatRect: NOT EQ ", unionRect.String(), inMatRect.String())
+
+			canvasMat, overlayRect := MatToSquare(inMat)
+			gocv.Rectangle(&canvasMat, overlayRect, color.RGBA{0, 0, 255, 0}, 2)
+			return canvasMat
+		}
+	}
 }
