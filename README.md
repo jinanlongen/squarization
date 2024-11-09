@@ -1,0 +1,2 @@
+# squarization
+Squarify images
