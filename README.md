@@ -1,7 +1,11 @@
-# squarization
+squarization
+========
 
 Squarify images
 
-![MatToSquare](docs/MatToSquare.png)
-![MaxCenteredSquareInRectangle](docs/MaxCenteredSquareInRectangle.png)
-![RectUnion](docs/RectUnion.png)
+1. put images in data/
+2. run the commands
+```sh
+go run cmd/squarization/main.go
+```
+3. get the results in outputs/

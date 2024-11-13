@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	processDir("data/imgs", "outputs/")
+	processDir("data", "outputs/")
 }
 
 func processDir(inputDir string, outputDir string) {
